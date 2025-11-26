@@ -1,0 +1,90 @@
+Minseob Shin
+ 847-903-1319
+
+# minseob.shin11@gmail.com
+
+ï linkedin.com/in/minseob-shin
+
+Objective: Leverage expertise in hardware–software co-design to design and optimize high-performance computing systems
+
+Education
+
+University of Illinois at Urbana-Champaign
+Bachelor of Science in Computer Engineering
+
+Aug. 2023 – May 2027
+GPA: 3.93/4.00
+
+Relevant Coursework: Computer Organization & Design (ECE411), Computer Systems Engineering (ECE391), Applied Parallel
+Programming (ECE408), Digital Systems Laboratory (ECE385), Sensors and Instrumentation (ECE437)
+
+Projects
+MeOoOw – Out-of-Order Execution Processor | SystemVerilog, Computer Architecture & Microarchitecture
+Sept 2025 – Present
+• Design and implement a superscalar Out-of-Order (OoO) RISC processor featuring explicit register renaming, dynamic scheduling, and
+reorder buffer (ROB) for high IPC and efficient instruction-level parallelism
+• Verified individual components through directed tests and constrained-random verification in SystemVerilog, leveraging the Synopsys
+toolchain for simulation, synthesis, waveform analysis, and timing closure
+GPT-2 Inference Acceleration using CUDA | CUDA, GPU Acceleration, Deep Learning Systems
+Sept 2025 – Present
+• Implement and optimize custom CUDA kernels for GPT-2 inference, applying various GPU optimizations such as shared memory
+tiling, memory coalescing, warp-level parallelism, and Tensor Core acceleration to achieve substantial speedups over CPU baselines
+• Conduct detailed system-level and kernel-level profiling using NVIDIA Nsight Systems and Nsight Compute, identifying performance
+bottlenecks, memory stalls, and occupancy issues to guide iterative kernel optimization
+• Analyze GPU memory hierarchies, occupancy, and execution divergence, gaining deep insight into transformer model performance
+characteristics on modern GPUs
+CosmOS - Operating System from scratch | C, Operating Systems & Systems Programming
+Jul 2025 – Aug 2025
+• Collaborated in a team of three to develop core OS subsystems, including interrupt handling, user-level threading, and
+kernel/application paging, inspired by Unix Version 6
+• Implemented a custom, block-based filesystem with full CRUD functionality (create, read, update, delete) and a caching system for
+improved I/O performance
+• Built virtual memory management using the RISC-V Sv39 paging scheme, with lazy allocation and page fault handling to optimize
+memory utilization and process isolation
+Music Synthesizer with Playback on FPGA | SystemVerilog, C, FPGA Design & Implementation
+Apr 2025 – May 2025
+• Designed and implemented a real-time music synthesizer and playback system on FPGA, supporting multi-track composition and
+HDMI-based visual feedback
+• Developed a custom embedded architecture utilizing BRAM to store multi-track note data, integrating keyboard input and on-screen
+note visualization to enable synchronized playback and an interactive, real-time composition experience
+• Verified correct functionality using the Xilinx Vivado waveform viewer and hardware logic analyzers, ensuring valid BRAM access,
+accurate HDMI timing, and glitch-free audio output
+
+Experience
+UIUC Chen Lab
+
+Feb 2025 – Sept 2025
+Undergraduate Research Assistant
+Urbana, IL
+• Contributed to the expansion of ScaleHLS, an MLIR-based high-level synthesis (HLS) framework, by integrating Dafny for formal
+verification to improve correctness and reliability in hardware design workflows
+• Implemented computational kernels and convolutional neural networks (CNNs) directly in Dafny to explore verified hardware synthesis
+• Collaborated with lab members through weekly meetings, slide presentations, and technical discussions to align research directions and
+communicate progress effectively
+
+ShotHawk
+
+June 2025 – Aug 2025
+Embedded Systems Intern
+Urbana, IL
+• Optimized the reliability and scalability of NVIDIA Jetson–based embedded devices by automating React application startup and
+crash recovery with shell scripts, reducing manual setup and improving system robustness in field deployments
+• Collaborated with cross-functional teams to streamline deployment workflows and support the company’s transition from a minimally
+viable product to a market-ready solution
+
+Leadership & Extracurricular
+IEEE U of I
+
+Mar 2024 – Present
+Web Developer
+Urbana, IL
+∗ Led full-stack development of the official IEEE U of I Chapter website using Next.js, React, and TypeScript, creating a responsive
+platform that attracted 1,000+ visitors and enhanced event promotion, and community outreach
+∗ Collaborated with club executives and members to continuously update and optimize the website, ensuring it meets the organization’s
+evolving needs
+
+Technical Skills
+Languages: SystemVerilog, C, C++, CUDA, Verilog, Assembly (RISC-V), Bash, JavaScript, Python, Java, HTML/CSS
+Frameworks & Tools: Git, Synopsys Toolchain, Xilinx Vivado, Vitis, GDB, Nsight Systems, Nsight Compute, React, Node.js
+
+
