@@ -10,7 +10,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Default to dark mode
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (saved !== null) {
       setIsDarkMode(JSON.parse(saved));
     }
+    // If no saved preference, it stays as default (true = dark mode)
   }, []);
 
   useEffect(() => {
