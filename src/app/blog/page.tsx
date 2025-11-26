@@ -1,9 +1,15 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { posts, TOPICS, Topic, getPostsByTopic } from '@/data/posts';
+
+// Seeded random number generator for consistent star positions
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 
 export default function BlogPage() {
   const [selectedTopic, setSelectedTopic] = useState<Topic>('All');
@@ -11,8 +17,38 @@ export default function BlogPage() {
   const pageRef = useRef<HTMLDivElement>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const starsRef = useRef<HTMLDivElement>(null);
 
   const filteredPosts = getPostsByTopic(selectedTopic);
+
+  // Generate stars with fixed positions for hydration consistency
+  const stars = useMemo(() => [
+    { id: 0, left: 5, top: 8, size: 2 },
+    { id: 1, left: 12, top: 15, size: 1.5 },
+    { id: 2, left: 20, top: 5, size: 2.5 },
+    { id: 3, left: 28, top: 22, size: 1 },
+    { id: 4, left: 35, top: 12, size: 2 },
+    { id: 5, left: 42, top: 28, size: 1.5 },
+    { id: 6, left: 50, top: 8, size: 2 },
+    { id: 7, left: 58, top: 18, size: 1 },
+    { id: 8, left: 65, top: 25, size: 2.5 },
+    { id: 9, left: 72, top: 10, size: 1.5 },
+    { id: 10, left: 78, top: 20, size: 2 },
+    { id: 11, left: 85, top: 5, size: 1 },
+    { id: 12, left: 92, top: 15, size: 2 },
+    { id: 13, left: 8, top: 35, size: 1.5 },
+    { id: 14, left: 18, top: 42, size: 2 },
+    { id: 15, left: 25, top: 38, size: 1 },
+    { id: 16, left: 38, top: 45, size: 2.5 },
+    { id: 17, left: 48, top: 35, size: 1.5 },
+    { id: 18, left: 55, top: 48, size: 2 },
+    { id: 19, left: 68, top: 40, size: 1 },
+    { id: 20, left: 75, top: 50, size: 2 },
+    { id: 21, left: 88, top: 38, size: 1.5 },
+    { id: 22, left: 95, top: 45, size: 2 },
+    { id: 23, left: 3, top: 55, size: 1 },
+    { id: 24, left: 15, top: 52, size: 2.5 },
+  ], []);
 
   useEffect(() => {
     setMounted(true);
@@ -42,6 +78,28 @@ export default function BlogPage() {
           delay: 0.3,
         });
       }
+
+      // Twinkling stars
+      const starElements = starsRef.current?.querySelectorAll('.star');
+      starElements?.forEach((star, i) => {
+        const baseOpacity = seededRandom(i * 4.4) * 0.3 + 0.1;
+        const maxOpacity = seededRandom(i * 5.5) * 0.4 + 0.4;
+        const duration = seededRandom(i * 6.6) * 3 + 1.5;
+        const delay = seededRandom(i * 7.7) * 2;
+
+        gsap.fromTo(
+          star,
+          { opacity: baseOpacity },
+          {
+            opacity: maxOpacity,
+            duration: duration,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            delay: delay,
+          }
+        );
+      });
     }, pageRef);
 
     return () => ctx.revert();
@@ -69,13 +127,40 @@ export default function BlogPage() {
   return (
     <div 
       ref={pageRef}
-      className="min-h-screen w-full bg-[#0a1628] pb-16 flex flex-col items-center"
+      className="min-h-screen w-full bg-[#0a1628] pb-16 flex flex-col items-center relative overflow-hidden"
       style={{ paddingTop: '120px' }}
     >
-      {/* Background */}
-      <div className="fixed inset-0 bg-gradient-to-b from-[#0a1628] via-[#0d1e36] to-[#0a1628]" style={{ zIndex: -1 }} />
+      {/* Background gradient - absolute positioned */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1628] via-[#0d1e36] to-[#1a2a4a]" />
       
-      <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-8">
+      {/* Stars - higher opacity for visibility */}
+      <div ref={starsRef} className="absolute inset-0 pointer-events-none overflow-hidden">
+        {stars.map((star) => (
+          <div
+            key={star.id}
+            className="star absolute rounded-full bg-white"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: `${star.size * 1.5}px`,
+              height: `${star.size * 1.5}px`,
+              opacity: 0.6,
+              boxShadow: '0 0 3px rgba(255,255,255,0.5)',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Subtle ambient glow at bottom */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        style={{ 
+          background: 'linear-gradient(to top, rgba(26, 58, 92, 0.4) 0%, transparent 100%)',
+        }}
+      />
+      
+      {/* Main content - needs to be above background elements */}
+      <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header - Airport Style */}
         <div ref={headerRef} className="mb-8">
           {/* Main title bar */}

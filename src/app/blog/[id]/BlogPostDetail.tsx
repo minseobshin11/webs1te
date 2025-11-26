@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { BlogPost } from '@/data/posts';
@@ -10,6 +10,12 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeRaw from 'rehype-raw';
 
+// Seeded random number generator for consistent star positions
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
 interface Props {
   post: BlogPost;
 }
@@ -18,7 +24,37 @@ export default function BlogPostDetail({ post }: Props) {
   const pageRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const starsRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+
+  // Generate stars with fixed positions for hydration consistency
+  const stars = useMemo(() => [
+    { id: 0, left: 5, top: 8, size: 2 },
+    { id: 1, left: 12, top: 15, size: 1.5 },
+    { id: 2, left: 20, top: 5, size: 2.5 },
+    { id: 3, left: 28, top: 22, size: 1 },
+    { id: 4, left: 35, top: 12, size: 2 },
+    { id: 5, left: 42, top: 28, size: 1.5 },
+    { id: 6, left: 50, top: 8, size: 2 },
+    { id: 7, left: 58, top: 18, size: 1 },
+    { id: 8, left: 65, top: 25, size: 2.5 },
+    { id: 9, left: 72, top: 10, size: 1.5 },
+    { id: 10, left: 78, top: 20, size: 2 },
+    { id: 11, left: 85, top: 5, size: 1 },
+    { id: 12, left: 92, top: 15, size: 2 },
+    { id: 13, left: 8, top: 35, size: 1.5 },
+    { id: 14, left: 18, top: 42, size: 2 },
+    { id: 15, left: 25, top: 38, size: 1 },
+    { id: 16, left: 38, top: 45, size: 2.5 },
+    { id: 17, left: 48, top: 35, size: 1.5 },
+    { id: 18, left: 55, top: 48, size: 2 },
+    { id: 19, left: 68, top: 40, size: 1 },
+    { id: 20, left: 75, top: 50, size: 2 },
+    { id: 21, left: 88, top: 38, size: 1.5 },
+    { id: 22, left: 95, top: 45, size: 2 },
+    { id: 23, left: 3, top: 55, size: 1 },
+    { id: 24, left: 15, top: 52, size: 2.5 },
+  ], []);
 
   useEffect(() => {
     setMounted(true);
@@ -28,6 +64,7 @@ export default function BlogPostDetail({ post }: Props) {
     if (!mounted) return;
 
     const ctx = gsap.context(() => {
+      // Header and content animations
       gsap.from(headerRef.current, {
         opacity: 0,
         y: -20,
@@ -42,6 +79,21 @@ export default function BlogPostDetail({ post }: Props) {
         ease: 'power3.out',
         delay: 0.3,
       });
+
+      // Star twinkling animation
+      if (starsRef.current) {
+        const starElements = starsRef.current.querySelectorAll('.star');
+        starElements.forEach((star, i) => {
+          gsap.to(star, {
+            opacity: () => 0.3 + seededRandom(i * 100) * 0.4,
+            duration: 1 + seededRandom(i * 200) * 2,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            delay: seededRandom(i * 300) * 2,
+          });
+        });
+      }
     }, pageRef);
 
     return () => ctx.revert();
@@ -50,7 +102,7 @@ export default function BlogPostDetail({ post }: Props) {
   return (
     <div 
       ref={pageRef}
-      className="min-h-screen w-full bg-[#0a1628] pb-16 flex flex-col items-center"
+      className="min-h-screen w-full bg-[#0a1628] pb-16 flex flex-col items-center relative"
       style={{ paddingTop: '120px' }}
     >
       {/* KaTeX CSS */}
@@ -64,7 +116,25 @@ export default function BlogPostDetail({ post }: Props) {
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-b from-[#0a1628] via-[#0d1e36] to-[#0a1628]" style={{ zIndex: -1 }} />
       
-      <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+      {/* Stars */}
+      <div ref={starsRef} className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        {stars.map((star) => (
+          <div
+            key={star.id}
+            className="star absolute rounded-full bg-white"
+            style={{
+              left: `${star.left}%`,
+              top: `${star.top}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              opacity: 0.6,
+              boxShadow: `0 0 ${star.size * 2}px rgba(255, 255, 255, 0.5)`,
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 1 }}>
         {/* Header - Airport boarding pass style */}
         <div ref={headerRef} className="mb-8">
           {/* Back navigation */}

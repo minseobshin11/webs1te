@@ -126,6 +126,24 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
         }}
       >
         <div className="w-full max-w-4xl">
+          {/* Back button */}
+          <div style={{ marginBottom: '48px' }}>
+            <Link 
+              href="/projects"
+              className="inline-flex items-center gap-2 text-[#7eb8c4] hover:text-[#e8dfd6] transition-colors duration-300 group"
+            >
+              <svg 
+                className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span className="text-sm tracking-wide">Back to Projects</span>
+            </Link>
+          </div>
+
           <div className="flex flex-col items-center lg:flex-row lg:items-start gap-8 lg:gap-12">
             {/* Building illustration */}
             <div ref={buildingRef} className="flex flex-col items-center flex-shrink-0 w-[180px] sm:w-[200px] lg:w-[220px]">
@@ -137,7 +155,8 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
             </div>
 
             {/* Project details */}
-            <div ref={contentRef} className="space-y-6 sm:space-y-8 w-full max-w-xl lg:max-w-none">
+            <div ref={contentRef} className="w-full max-w-xl lg:max-w-none">
+              {/* Title and description */}
               <div>
                 <h1
                   className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-[#e8dfd6] mb-3 sm:mb-4 tracking-wide text-center lg:text-left"
@@ -151,8 +170,8 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
 
               {/* Technologies */}
-              <div>
-                <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] mb-2 sm:mb-3 text-center lg:text-left">
+              <div style={{ marginTop: '12px' }}>
+                <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] text-center lg:text-left" style={{ marginBottom: '12px' }}>
                   Technologies
                 </h2>
                 <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
@@ -168,8 +187,8 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
 
               {/* Long description */}
-              <div>
-                <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] mb-2 sm:mb-3 text-center lg:text-left">
+              <div style={{ marginTop: '24px' }}>
+                <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] text-center lg:text-left" style={{ marginBottom: '8px' }}>
                   About This Project
                 </h2>
                 <div className="text-sm sm:text-base text-[#a0b4c0] leading-relaxed space-y-3 sm:space-y-4">
@@ -181,8 +200,8 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
               {/* Links */}
               {project.links.length > 0 && (
-                <div>
-                  <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] mb-2 sm:mb-3 text-center lg:text-left">
+                <div style={{ marginTop: '24px' }}>
+                  <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] text-center lg:text-left" style={{ marginBottom: '12px' }}>
                     Links
                   </h2>
                   <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
@@ -216,7 +235,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
               {/* Placeholder for future links */}
               {project.links.length === 0 && (
-                <div className="p-3 sm:p-4 border border-dashed border-[#2a4a6c] rounded-lg">
+                <div className="p-3 sm:p-4 border border-dashed border-[#2a4a6c] rounded-lg" style={{ marginTop: '24px' }}>
                   <p className="text-xs sm:text-sm text-[#6a8a9c] italic text-center lg:text-left">
                     Links to reports, slides, and demos will be added here.
                   </p>
