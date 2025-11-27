@@ -64,7 +64,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://github.com/minseob-shin"
+              href="https://github.com/minseobshin11"
               target="_blank"
               rel="noopener noreferrer"
               className={`${mutedClass} ${hoverClass} transition-colors duration-300`}
