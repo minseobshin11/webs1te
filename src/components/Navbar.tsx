@@ -96,6 +96,15 @@ export default function Navbar() {
                 pathname.startsWith('/blog') ? 'w-full' : 'w-0 group-hover:w-full'
               }`} />
             </Link>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`text-xs sm:text-sm tracking-widest uppercase transition-colors duration-300 relative group ${linkClass}`}
+            >
+              Resume
+              <span className={`absolute -bottom-1 left-0 w-0 h-px ${underlineClass} transition-all duration-300 group-hover:w-full`} />
+            </a>
             <Link
               href="/#contact"
               className={`text-xs sm:text-sm tracking-widest uppercase transition-colors duration-300 relative group ${linkClass}`}
