@@ -59,7 +59,7 @@ Reflecting on 2025…
   <iframe 
     width="100%" 
     height="315" 
-    src="https://www.youtube.com/embed/PJOlpiEueM8" 
+    src="https://www.youtube.com/embed/PJOlpiEueM8?cc_load_policy=1&cc_lang_pref=en" 
     title="YouTube video player" 
     frameBorder="0" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
