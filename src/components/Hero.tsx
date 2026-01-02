@@ -43,7 +43,11 @@ function ShootingStar({ initialDelay }: ShootingStarProps) {
     duration: Math.random() * 1 + 2,    // 2-3 seconds
   });
 
-  const [values, setValues] = useState(generateRandomValues);
+  const [values, setValues] = useState<{ x: number, y: number, angle: number, duration: number } | null>(null);
+
+  useEffect(() => {
+    setValues(generateRandomValues());
+  }, []);
   const [animationKey, setAnimationKey] = useState(0);
   const [isFirstRun, setIsFirstRun] = useState(true);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -64,12 +68,8 @@ function ShootingStar({ initialDelay }: ShootingStarProps) {
   // Translation uses screen coords directly:
   // dx = cos(angle) * distance  (positive = right)
   // dy = sin(angle) * distance  (positive = down on screen)
-  
-  const rotation = values.angle + 90; // CSS rotation for head to point in travel direction
-  const angleRad = (values.angle * Math.PI) / 180;
-  const distance = 300;
-  const dx = Math.cos(angleRad) * distance;
-  const dy = Math.sin(angleRad) * distance;
+
+
 
   // Handle animation end - randomize and restart
   useEffect(() => {
@@ -87,6 +87,31 @@ function ShootingStar({ initialDelay }: ShootingStarProps) {
   }, [animationKey]); // Re-attach listener when key changes (new element created)
 
   // Create unique keyframe name for this instance
+  if (!values) return null;
+
+  // SCREEN COORDINATES: 0°=right, 90°=down, 180°=left, 270°=up
+  // This matches CSS transform conventions where +Y is down
+  //
+  // CSS ROTATION:
+  // - rotate(0deg): top of element points UP
+  // - rotate(90deg): top points RIGHT (clockwise rotation)
+  // - rotate(180deg): top points DOWN
+  // - rotate(135deg): top points DOWN-RIGHT
+  // - rotate(225deg): top points DOWN-LEFT
+  //
+  // For the bright HEAD (top of gradient) to point in direction of travel:
+  // CSS rotation = screenAngle + 90°
+  //
+  // Translation uses screen coords directly:
+  // dx = cos(angle) * distance  (positive = right)
+  // dy = sin(angle) * distance  (positive = down on screen)
+
+  const rotation = values.angle + 90; // CSS rotation for head to point in travel direction
+  const angleRad = (values.angle * Math.PI) / 180;
+  const distance = 300;
+  const dx = Math.cos(angleRad) * distance;
+  const dy = Math.sin(angleRad) * distance;
+
   const keyframeName = `shooting-star-${animationKey}-${Math.round(values.angle)}`;
 
   return (
@@ -140,6 +165,11 @@ export default function Hero() {
   const cloudsRef = useRef<HTMLDivElement>(null);
   const cloudAnimationRef = useRef<number | null>(null);
   const cloudPositionsRef = useRef<number[]>([]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Cloud animation using requestAnimationFrame for reliable looping
   const animateClouds = useCallback(() => {
@@ -153,12 +183,12 @@ export default function Hero() {
     clouds.forEach((cloud, i) => {
       const htmlCloud = cloud as HTMLElement;
       cloudPositionsRef.current[i] += speeds[i] || 0.3;
-      
+
       // When cloud goes past right edge, reset to left
       if (cloudPositionsRef.current[i] > screenWidth + cloudWidth) {
         cloudPositionsRef.current[i] = -cloudWidth;
       }
-      
+
       htmlCloud.style.transform = `translateX(${cloudPositionsRef.current[i]}px)`;
     });
 
@@ -243,21 +273,19 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Gradient Background - Day/Night transition */}
-      <div 
-        className={`absolute inset-0 transition-all duration-1000 ${
-          isDarkMode 
-            ? 'bg-gradient-to-b from-[#0a1628] via-[#1a2a4a] to-[#2d3a52]' 
-            : 'bg-gradient-to-b from-[#fcd5c0] via-[#f5b896] to-[#e8a07a]'
-        }`} 
+      <div
+        className={`absolute inset-0 transition-all duration-1000 ${isDarkMode
+          ? 'bg-gradient-to-b from-[#0a1628] via-[#1a2a4a] to-[#2d3a52]'
+          : 'bg-gradient-to-b from-[#fcd5c0] via-[#f5b896] to-[#e8a07a]'
+          }`}
       />
 
-      {/* Stars - only visible in dark mode */}
-      <div 
-        className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-1000 ${
-          isDarkMode ? 'opacity-100' : 'opacity-0'
-        }`}
+      {/* Stars - only visible in dark mode, rendered client-side to avoid hydration mismatch */}
+      <div
+        className={`absolute inset-0 overflow-hidden pointer-events-none transition-opacity duration-1000 ${isDarkMode ? 'opacity-100' : 'opacity-0'
+          }`}
       >
-        {stars.map((star) => (
+        {mounted && stars.map((star) => (
           <div
             key={star.id}
             className="absolute rounded-full bg-white animate-twinkle"
@@ -271,12 +299,16 @@ export default function Hero() {
             }}
           />
         ))}
-        {/* Shooting stars - randomized position and direction after each animation */}
-        <ShootingStar initialDelay={1} />
-        <ShootingStar initialDelay={4} />
-        <ShootingStar initialDelay={7} />
+        {/* Shooting stars - client side only */}
+        {mounted && (
+          <>
+            <ShootingStar initialDelay={1} />
+            <ShootingStar initialDelay={4} />
+            <ShootingStar initialDelay={7} />
+          </>
+        )}
         {/* Moon */}
-        <div 
+        <div
           className="absolute top-[8%] right-[20%] w-16 h-16 md:w-20 md:h-20 rounded-full"
           style={{
             background: 'radial-gradient(circle at 30% 30%, #fef6e8 0%, #f5e6c8 50%, #e8d4b0 100%)',
@@ -455,18 +487,16 @@ export default function Hero() {
       <div className="relative z-20 text-center px-6">
         <h1
           ref={nameRef}
-          className={`text-5xl md:text-7xl lg:text-8xl font-light tracking-wide mb-6 transition-colors duration-1000 ${
-            isDarkMode ? 'text-[#e8dfd6]' : 'text-[#3d2e26]'
-          }`}
+          className={`text-5xl md:text-7xl lg:text-8xl font-light tracking-wide mb-6 transition-colors duration-1000 ${isDarkMode ? 'text-[#e8dfd6]' : 'text-[#3d2e26]'
+            }`}
           style={{ fontFamily: 'Georgia, serif' }}
         >
           Minseob Shin
         </h1>
         <p
           ref={taglineRef}
-          className={`text-lg md:text-xl lg:text-2xl font-light tracking-widest uppercase transition-colors duration-1000 ${
-            isDarkMode ? 'text-[#a0b4c0]' : 'text-[#6b5549]'
-          }`}
+          className={`text-lg md:text-xl lg:text-2xl font-light tracking-widest uppercase transition-colors duration-1000 ${isDarkMode ? 'text-[#a0b4c0]' : 'text-[#6b5549]'
+            }`}
         >
           Computer Engineering Major at UIUC
         </p>
@@ -474,9 +504,8 @@ export default function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <a href="#contact" className={`flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer ${
-          isDarkMode ? 'text-[#a0b4c0]' : 'text-[#6b5549]'
-        }`}>
+        <a href="#contact" className={`flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer ${isDarkMode ? 'text-[#a0b4c0]' : 'text-[#6b5549]'
+          }`}>
           <span className="text-sm tracking-widest uppercase">Scroll</span>
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -485,11 +514,10 @@ export default function Hero() {
       </div>
 
       {/* Ground/Runway hint at bottom */}
-      <div className={`absolute bottom-0 left-0 right-0 h-24 transition-all duration-1000 ${
-        isDarkMode 
-          ? 'bg-gradient-to-t from-[#1a2530] via-[#243040] to-transparent opacity-50'
-          : 'bg-gradient-to-t from-[#8b7355] via-[#a08060] to-transparent opacity-30'
-      }`} />
+      <div className={`absolute bottom-0 left-0 right-0 h-24 transition-all duration-1000 ${isDarkMode
+        ? 'bg-gradient-to-t from-[#1a2530] via-[#243040] to-transparent opacity-50'
+        : 'bg-gradient-to-t from-[#8b7355] via-[#a08060] to-transparent opacity-30'
+        }`} />
     </section>
   );
 }

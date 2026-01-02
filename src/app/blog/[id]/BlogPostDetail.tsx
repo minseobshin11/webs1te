@@ -100,7 +100,7 @@ export default function BlogPostDetail({ post }: Props) {
   }, [mounted]);
 
   return (
-    <div 
+    <div
       ref={pageRef}
       className="min-h-screen w-full bg-[#0a1628] pb-16 flex flex-col items-center relative"
       style={{ paddingTop: '120px' }}
@@ -115,7 +115,7 @@ export default function BlogPostDetail({ post }: Props) {
 
       {/* Background */}
       <div className="fixed inset-0 bg-gradient-to-b from-[#0a1628] via-[#0d1e36] to-[#0a1628]" style={{ zIndex: -1 }} />
-      
+
       {/* Stars */}
       <div ref={starsRef} className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
         {stars.map((star) => (
@@ -133,12 +133,12 @@ export default function BlogPostDetail({ post }: Props) {
           />
         ))}
       </div>
-      
+
       <div className="w-full max-w-4xl px-4 sm:px-6 lg:px-8 relative" style={{ zIndex: 1 }}>
         {/* Header - Airport boarding pass style */}
         <div ref={headerRef} className="mb-8">
           {/* Back navigation */}
-          <Link 
+          <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-[#7eb8d8] hover:text-[#e8f4f8] transition-colors mb-6 text-sm"
             style={{ fontFamily: 'monospace' }}
@@ -151,13 +151,13 @@ export default function BlogPostDetail({ post }: Props) {
           <div className="bg-[#1a3a5c] rounded-t-lg overflow-hidden">
             {/* Top accent bar */}
             <div className="h-2 bg-gradient-to-r from-[#2a5a8c] via-[#7eb8d8] to-[#2a5a8c]" />
-            
+
             <div className="px-6 py-6">
               {/* Topic & Date row */}
               <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                 <div className="flex items-center gap-4">
                   <span className="bg-[#2a5a8c] px-3 py-1 rounded text-[#e8f4f8] text-xs tracking-wider"
-                        style={{ fontFamily: 'monospace' }}>
+                    style={{ fontFamily: 'monospace' }}>
                     {post.topic.toUpperCase()}
                   </span>
                   <span className="text-[#7eb8d8] text-sm" style={{ fontFamily: 'monospace' }}>
@@ -165,14 +165,14 @@ export default function BlogPostDetail({ post }: Props) {
                   </span>
                 </div>
                 <span className="text-green-400 text-sm font-bold tracking-wider"
-                      style={{ fontFamily: 'monospace', textShadow: '0 0 8px rgba(74, 222, 128, 0.5)' }}>
+                  style={{ fontFamily: 'monospace', textShadow: '0 0 8px rgba(74, 222, 128, 0.5)' }}>
                   {post.status}
                 </span>
               </div>
 
               {/* Title */}
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#e8f4f8] mb-2"
-                  style={{ fontFamily: 'Georgia, serif' }}>
+                style={{ fontFamily: 'Georgia, serif' }}>
                 {post.title}
               </h1>
 
@@ -191,7 +191,7 @@ export default function BlogPostDetail({ post }: Props) {
         </div>
 
         {/* Content */}
-        <div 
+        <div
           ref={contentRef}
           className="bg-[#0f2744] overflow-hidden shadow-xl"
         >
@@ -219,8 +219,8 @@ export default function BlogPostDetail({ post }: Props) {
                     </h3>
                   ),
                   // Paragraphs with tighter line height
-                  p: ({ children }) => (
-                    <p className="text-[#e4eef8] leading-normal mb-4">
+                  p: ({ children, className, style }) => (
+                    <p className={`text-[#e4eef8] leading-normal mb-4 ${className || ''}`} style={style}>
                       {children}
                     </p>
                   ),
@@ -250,7 +250,7 @@ export default function BlogPostDetail({ post }: Props) {
                   code: ({ className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || '');
                     const isInline = !match && !className;
-                    
+
                     if (isInline) {
                       return (
                         <code className="bg-[#1a3a5c] text-[#7ec8e8] px-2 py-1 rounded text-sm font-mono">
@@ -258,7 +258,7 @@ export default function BlogPostDetail({ post }: Props) {
                         </code>
                       );
                     }
-                    
+
                     return (
                       <code className={`${className} text-sm`} {...props}>
                         {children}
@@ -305,11 +305,12 @@ export default function BlogPostDetail({ post }: Props) {
                     <hr className="border-[#2a5a8c] my-8" />
                   ),
                   // Images - no auto caption since we use explicit *Figure X* captions
-                  img: ({ src, alt }) => (
-                    <img 
-                      src={src} 
-                      alt={alt || ''} 
-                      className="w-full rounded-lg border border-[#1a3a5c]" 
+                  img: ({ src, alt, className, style }) => (
+                    <img
+                      src={src}
+                      alt={alt || ''}
+                      className={className || "w-full rounded-lg border border-[#1a3a5c]"}
+                      style={style}
                     />
                   ),
                   // Emphasis - handle figure captions with more spacing
@@ -341,7 +342,7 @@ export default function BlogPostDetail({ post }: Props) {
                     const isFootnoteLink = href?.startsWith('#footnote-');
                     if (isFootnoteLink) {
                       return (
-                        <a 
+                        <a
                           href={href}
                           className="text-[#7ec8e8] hover:text-[#a8e0f8] no-underline scroll-smooth"
                         >
@@ -350,8 +351,8 @@ export default function BlogPostDetail({ post }: Props) {
                       );
                     }
                     return (
-                      <a 
-                        href={href} 
+                      <a
+                        href={href}
                         className="text-[#7ec8e8] hover:text-[#a8e0f8] underline underline-offset-2 transition-colors"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -364,8 +365,8 @@ export default function BlogPostDetail({ post }: Props) {
                   div: ({ id, children, className, style }) => {
                     if (id?.startsWith('footnote-')) {
                       return (
-                        <div 
-                          id={id} 
+                        <div
+                          id={id}
                           className="text-[#a8c8e0] text-sm leading-relaxed mb-2 scroll-mt-32"
                         >
                           {children}
@@ -385,7 +386,7 @@ export default function BlogPostDetail({ post }: Props) {
         {/* Footer - Boarding pass style to match header */}
         <div className="bg-[#1a3a5c] rounded-b-lg overflow-hidden">
           <div className="px-6 py-4 flex items-center justify-between">
-            <Link 
+            <Link
               href="/blog"
               className="inline-flex items-center gap-2 text-[#7eb8d8] hover:text-[#e8f4f8] transition-colors text-sm"
               style={{ fontFamily: 'monospace' }}

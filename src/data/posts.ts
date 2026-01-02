@@ -23,6 +23,57 @@ export type Topic = typeof TOPICS[number];
 
 export const posts: BlogPost[] = [
   {
+    id: '2025-wrapped',
+    title: 'Happy New Year 2026',
+    subtitle: '2025 Wrapped',
+    date: 'January 1, 2026',
+    topic: 'Personal',
+    author: 'Minseob Shin',
+    status: 'BOARDING',
+    content: `
+Reflecting on 2025…
+
+## SP25 - Happiest time of the year
+**Most valuable moment** - Squash Nationals
+
+
+
+## SU25 - Most creative time of the year
+**Best creation** - Painting inspired by Vancouver
+
+
+
+## FA25 - Most regretful time of the year
+**Most challenging accomplishment** - [MeOoOw Processor](/projects/meooow-processor)
+
+## Last thought…
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+  <img src="/blog/2025-wrapped/figure-1.png" alt="Memory 1" class="rounded-lg w-full h-auto object-cover" />
+  <img src="/blog/2025-wrapped/figure-2.png" alt="Memory 2" class="rounded-lg w-full h-auto object-cover" />
+</div>
+
+### Ending song for 2025…
+
+<div style="margin-top: 40px; margin-bottom: 40px;">
+  <iframe 
+    width="100%" 
+    height="315" 
+    src="https://www.youtube.com/embed/PJOlpiEueM8" 
+    title="YouTube video player" 
+    frameBorder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowFullScreen
+    style="border-radius: 12px;"
+  ></iframe>
+</div>
+
+<p class="text-center font-medium my-20 text-gray-400" style="margin-top: 40px; margin-bottom: 40px;">
+  2025년의 당신에게는 위로가, 2026년의 당신에게는 용기가 되길 바라며
+</p>
+    `,
+  },
+  {
     id: 'parallel-reduction',
     title: 'Parallel Reduction',
     subtitle: 'Optimizing GPU kernels with two-stage warp reduction',

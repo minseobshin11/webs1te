@@ -12,17 +12,24 @@ export interface Project {
   period: string;
   links: ProjectLink[];
   buildingType: 'modern' | 'classic' | 'industrial' | 'residential';
+  note?: string;
 }
 
 export const projects: Project[] = [
   {
-    id: 'meoow-processor',
+    id: 'meooow-processor',
     title: 'MeOoOw Processor',
     description: 'Out-of-Order Execution RISC Processor with superscalar architecture',
     longDescription: 'Design and implement a superscalar Out-of-Order (OoO) RISC processor featuring explicit register renaming, dynamic scheduling, and reorder buffer (ROB) for high IPC and efficient instruction-level parallelism.\n\nVerified individual components through directed tests and constrained-random verification in SystemVerilog, leveraging the Synopsys toolchain for simulation, synthesis, waveform analysis, and timing closure.',
     technologies: ['SystemVerilog', 'Computer Architecture', 'Microarchitecture'],
     period: 'Sept 2025 – Present',
-    links: [],
+    links: [
+      {
+        label: 'Read Report',
+        url: '/projects/meooow/MeOoOw%20Report.pdf'
+      }
+    ],
+    note: 'Source code available for private review upon request.',
     buildingType: 'modern',
   },
   {
@@ -32,7 +39,17 @@ export const projects: Project[] = [
     longDescription: 'Implement and optimize custom CUDA kernels for GPT-2 inference, applying various GPU optimizations such as shared memory tiling, memory coalescing, warp-level parallelism, and Tensor Core acceleration to achieve substantial speedups over CPU baselines.\n\nConduct detailed system-level and kernel-level profiling using NVIDIA Nsight Systems and Nsight Compute, identifying performance bottlenecks, memory stalls, and occupancy issues to guide iterative kernel optimization.\n\nAnalyze GPU memory hierarchies, occupancy, and execution divergence, gaining deep insight into transformer model performance characteristics on modern GPUs.',
     technologies: ['CUDA', 'GPU Acceleration', 'Deep Learning', 'Nsight Systems'],
     period: 'Sept 2025 – Present',
-    links: [],
+    links: [
+      {
+        label: 'GPU Compute Primitives',
+        url: '/projects/gpt2/CUDA%20GPT-2%20Report.pdf'
+      },
+      {
+        label: 'LLM Inference Scaling',
+        url: '/projects/gpt2/CUDA%20GPT-2%20Final%20Report.pdf'
+      }
+    ],
+    note: 'Source code available for private review upon request.',
     buildingType: 'industrial',
   },
   {
@@ -43,6 +60,7 @@ export const projects: Project[] = [
     technologies: ['C', 'Operating Systems', 'RISC-V', 'Systems Programming'],
     period: 'Jul 2025 – Aug 2025',
     links: [],
+    note: 'Source code available for private review upon request.',
     buildingType: 'classic',
   },
   {
@@ -52,7 +70,13 @@ export const projects: Project[] = [
     longDescription: 'Designed and implemented a real-time music synthesizer and playback system on FPGA, supporting multi-track composition and HDMI-based visual feedback.\n\nDeveloped a custom embedded architecture utilizing BRAM to store multi-track note data, integrating keyboard input and on-screen note visualization to enable synchronized playback and an interactive, real-time composition experience.\n\nVerified correct functionality using the Xilinx Vivado waveform viewer and hardware logic analyzers, ensuring valid BRAM access, accurate HDMI timing, and glitch-free audio output.',
     technologies: ['SystemVerilog', 'C', 'FPGA Design', 'Xilinx Vivado'],
     period: 'Apr 2025 – May 2025',
-    links: [],
+    links: [
+      {
+        label: 'Read Report',
+        url: '/projects/synth/FPGA%20Music%20Synth.pdf'
+      }
+    ],
+    note: 'Source code available for private review upon request.',
     buildingType: 'residential',
   },
 ];

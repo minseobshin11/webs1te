@@ -15,10 +15,10 @@ export default function Footer() {
   const hoverClass = isDarkTheme ? 'hover:text-white' : 'hover:text-[#fef6f0]';
 
   return (
-    <footer 
+    <footer
       className={`${bgClass} ${textClass} w-full py-4 sm:py-5 lg:py-6`}
     >
-      <div 
+      <div
         className="w-full"
         style={{
           paddingLeft: 'max(1.5rem, 3vw)',
@@ -33,7 +33,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <p className={`text-sm ${mutedClass} font-light order-last sm:order-none`}>
-            © 2025 All rights reserved
+            © 2026 All rights reserved
           </p>
 
           {/* Social Links */}

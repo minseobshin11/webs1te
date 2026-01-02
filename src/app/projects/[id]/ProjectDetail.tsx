@@ -117,7 +117,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       </div>
 
       {/* Main content - using inline style to ensure padding works */}
-      <div 
+      <div
         className="relative z-10 pb-20 w-full flex justify-center"
         style={{
           paddingTop: '140px', // Explicit top padding to clear fixed navbar
@@ -128,14 +128,14 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
         <div className="w-full max-w-4xl">
           {/* Back button */}
           <div style={{ marginBottom: '48px' }}>
-            <Link 
+            <Link
               href="/projects"
               className="inline-flex items-center gap-2 text-[#7eb8c4] hover:text-[#e8dfd6] transition-colors duration-300 group"
             >
-              <svg 
-                className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300" 
-                fill="none" 
-                viewBox="0 0 24 24" 
+              <svg
+                className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-300"
+                fill="none"
+                viewBox="0 0 24 24"
                 stroke="currentColor"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -199,42 +199,56 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               </div>
 
               {/* Links */}
-              {project.links.length > 0 && (
+              {(project.links.length > 0 || project.note) && (
                 <div style={{ marginTop: '24px' }}>
                   <h2 className="text-xs sm:text-sm tracking-widest uppercase text-[#7eb8c4] text-center lg:text-left" style={{ marginBottom: '12px' }}>
-                    Links
+                    Links & Resources
                   </h2>
-                  <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-[#2a4a6c]/50 text-[#e8dfd6] rounded-lg border border-[#3a5a7c] hover:bg-[#3a5a7c] transition-colors duration-300"
-                      >
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
+                  <div className="flex flex-col gap-4 items-center lg:items-start">
+                    {project.links.length > 0 && (
+                      <div className="flex flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+                        {project.links.map((link) => (
+                          <a
+                            key={link.url}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-[#2a4a6c]/50 text-[#e8dfd6] rounded-lg border border-[#3a5a7c] hover:bg-[#3a5a7c] transition-colors duration-300"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                              />
+                            </svg>
+                            {link.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Private Code Note */}
+                    {project.note && (
+                      <div className="flex items-center gap-2 text-sm text-[#a0b4c0] italic bg-[#1a3a5c]/30 px-4 py-2 rounded-lg border border-[#2a4a6c]/50">
+                        <svg className="w-4 h-4 text-[#7eb8c4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
-                        {link.label}
-                      </a>
-                    ))}
+                        {project.note}
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
 
               {/* Placeholder for future links */}
-              {project.links.length === 0 && (
+              {project.links.length === 0 && !project.note && (
                 <div className="p-3 sm:p-4 border border-dashed border-[#2a4a6c] rounded-lg" style={{ marginTop: '24px' }}>
                   <p className="text-xs sm:text-sm text-[#6a8a9c] italic text-center lg:text-left">
                     Links to reports, slides, and demos will be added here.

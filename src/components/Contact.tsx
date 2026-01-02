@@ -45,8 +45,10 @@ export default function Contact() {
   const { isDarkMode } = useTheme();
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -77,9 +79,9 @@ export default function Contact() {
         {/* Using a wider viewBox ratio and cover behavior for consistent appearance */}
         {/* Mobile: positioned higher (-top-[20vh]) to show road instead of sky */}
         {/* Desktop: normal position */}
-        <svg 
+        <svg
           className="absolute left-0 right-0 w-full h-[70vh] md:h-full md:inset-0 -top-[20vh] md:top-0"
-          viewBox="0 0 1000 800" 
+          viewBox="0 0 1000 800"
           preserveAspectRatio="xMidYMid slice"
         >
           <defs>
@@ -88,7 +90,7 @@ export default function Contact() {
               Day mode: Hero ends with peachy sunset colors
               Dark mode: Hero ends with deep blue night sky
             */}
-            
+
             {/* Sky gradient - Day vs Night */}
             <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               {isDarkMode ? (
@@ -109,7 +111,7 @@ export default function Contact() {
                 </>
               )}
             </linearGradient>
-            
+
             {/* Field gradients - Day vs Night */}
             <linearGradient id="leftFieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               {isDarkMode ? (
@@ -128,7 +130,7 @@ export default function Contact() {
                 </>
               )}
             </linearGradient>
-            
+
             <linearGradient id="rightFieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               {isDarkMode ? (
                 <>
@@ -146,7 +148,7 @@ export default function Contact() {
                 </>
               )}
             </linearGradient>
-            
+
             {/* Road surface - dark asphalt */}
             <linearGradient id="roadGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor={isDarkMode ? "#2a2a2a" : "#4a4a4a"} />
@@ -164,7 +166,7 @@ export default function Contact() {
               </feMerge>
             </filter>
           </defs>
-          
+
           {/* 
             RESPONSIVE DESIGN:
             - ViewBox is 1000x800 (taller to work with various aspect ratios)
@@ -172,121 +174,121 @@ export default function Contact() {
             - Road extends WAY beyond edges at bottom for that "standing on road" feel
             - Using xMidYMid slice to crop evenly and maintain perspective
           */}
-          
+
           {/* Sky/atmosphere band at top - extends higher for tall viewports */}
           <rect x="-500" y="-200" width="2000" height="420" fill="url(#skyGradient)" />
-          
+
           {/* Left field - perspective trapezoid, extends beyond viewport */}
-          <polygon 
-            points="-500,200 450,200 -800,800 -2000,800 -2000,200" 
+          <polygon
+            points="-500,200 450,200 -800,800 -2000,800 -2000,200"
             fill="url(#leftFieldGradient)"
           />
-          
+
           {/* Right field - perspective trapezoid, extends beyond viewport */}
-          <polygon 
-            points="550,200 1500,200 3000,200 3000,800 1800,800" 
+          <polygon
+            points="550,200 1500,200 3000,200 3000,800 1800,800"
             fill="url(#rightFieldGradient)"
           />
-          
+
           {/* THE ROAD - extends far beyond viewport at bottom */}
           {/* At y=200 (horizon): road is 100px wide (450 to 550) */}
           {/* At y=800 (bottom): road is 2600px wide (-800 to 1800) */}
-          <polygon 
-            points="450,200 550,200 1800,800 -800,800" 
+          <polygon
+            points="450,200 550,200 1800,800 -800,800"
             fill="url(#roadGradient)"
           />
-          
+
           {/* Road edge lines - subtle */}
-          <line 
-            x1="450" y1="200" 
-            x2="-800" y2="800" 
-            stroke="#666" 
-            strokeWidth="2" 
-            opacity="0.4" 
+          <line
+            x1="450" y1="200"
+            x2="-800" y2="800"
+            stroke="#666"
+            strokeWidth="2"
+            opacity="0.4"
           />
-          <line 
-            x1="550" y1="200" 
-            x2="1800" y2="800" 
-            stroke="#666" 
-            strokeWidth="2" 
-            opacity="0.4" 
+          <line
+            x1="550" y1="200"
+            x2="1800" y2="800"
+            stroke="#666"
+            strokeWidth="2"
+            opacity="0.4"
           />
-          
-          {/* Road side lights - only in dark mode */}
-          {isDarkMode && (() => {
+
+          {/* Road side lights - only in dark mode, client-side only */}
+          {mounted && isDarkMode && (() => {
             const lights = [];
             const horizonY = 200;
             const bottomY = 800;
             const numLights = 8;
-            
+
             for (let i = 0; i < numLights; i++) {
               const t = Math.pow(i / numLights, 2.2);
               const y = horizonY + t * (bottomY - horizonY);
-              
+
               // Calculate x positions based on road edges with perspective
               const roadLeftX = 450 - (450 + 800) * t;
               const roadRightX = 550 + (1800 - 550) * t;
-              
+
               // Light size scales with perspective
               const lightSize = 3 + t * 12;
               const glowSize = lightSize * 3;
-              
+
               if (y < bottomY - 50 && y > horizonY + 20) {
                 // Left side lights (orange)
                 lights.push(
                   <g key={`left-${i}`}>
-                    <ellipse 
-                      cx={roadLeftX - 20 - t * 50} 
-                      cy={y} 
-                      rx={glowSize} 
-                      ry={glowSize / 2} 
-                      fill="#ffa500" 
+                    <ellipse
+                      cx={roadLeftX - 20 - t * 50}
+                      cy={y}
+                      rx={glowSize}
+                      ry={glowSize / 2}
+                      fill="#ffa500"
                       opacity={0.15 + t * 0.2}
                     />
-                    <ellipse 
-                      cx={roadLeftX - 20 - t * 50} 
-                      cy={y} 
-                      rx={lightSize} 
-                      ry={lightSize / 2} 
-                      fill="#ffcc00" 
+                    <ellipse
+                      cx={roadLeftX - 20 - t * 50}
+                      cy={y}
+                      rx={lightSize}
+                      ry={lightSize / 2}
+                      fill="#ffcc00"
                       opacity={0.7 + t * 0.3}
                       filter="url(#roadLightGlow)"
                     >
-                      <animate 
-                        attributeName="opacity" 
+                      <animate
+                        attributeName="opacity"
                         values={`${0.7 + t * 0.3};${0.5 + t * 0.2};${0.7 + t * 0.3}`}
-                        dur="2s" 
+                        dur="2s"
                         repeatCount="indefinite"
                         begin={`${i * 0.2}s`}
                       />
                     </ellipse>
                   </g>
                 );
-                
+
                 // Right side lights (orange)
                 lights.push(
                   <g key={`right-${i}`}>
-                    <ellipse 
-                      cx={roadRightX + 20 + t * 50} 
-                      cy={y} 
-                      rx={glowSize} 
-                      ry={glowSize / 2} 
-                      fill="#ffa500" 
+                    <ellipse
+                      cx={roadRightX + 20 + t * 50}
+                      cy={y}
+                      rx={glowSize}
+                      ry={glowSize / 2}
+                      fill="#ffa500"
                       opacity={0.15 + t * 0.2}
                     />
-                    <ellipse 
-                      cx={roadRightX + 20 + t * 50} 
-                      cy={y} 
-                      rx={lightSize} 
-                      ry={lightSize / 2} 
-                      fill="#ffcc00" 
+                    <ellipse
+                      cx={roadRightX + 20 + t * 50}
+                      cy={y}
+                      rx={lightSize}
+                      ry={lightSize / 2}
+                      fill="#ffcc00"
                       opacity={0.7 + t * 0.3}
                       filter="url(#roadLightGlow)"
                     >
-                      <animate 
-                        attributeName="opacity" 
+                      <animate
+                        attributeName="opacity"
                         values={`${0.7 + t * 0.3};${0.5 + t * 0.2};${0.7 + t * 0.3}`}
-                        dur="2s" 
+                        dur="2s"
                         repeatCount="indefinite"
                         begin={`${i * 0.2 + 0.1}s`}
                       />
@@ -297,39 +299,39 @@ export default function Contact() {
             }
             return lights;
           })()}
-          
-          {/* Yellow center dashes - with proper perspective */}
-          {(() => {
+
+          {/* Yellow center dashes - with proper perspective, client-side only */}
+          {mounted && (() => {
             const dashes = [];
             const horizonY = 200;
             const bottomY = 800;
-            
+
             // Create dashes with exponential spacing (bunched at horizon, spread near viewer)
             const numDashes = 12;
-            
+
             for (let i = 0; i < numDashes; i++) {
               // Exponential distribution - more compressed near horizon
               const t = Math.pow(i / numDashes, 2.4);
               const tNext = Math.pow((i + 0.3) / numDashes, 2.4);
-              
+
               const y1 = horizonY + t * (bottomY - horizonY);
               const y2 = Math.min(horizonY + tNext * (bottomY - horizonY), bottomY - 5);
-              
+
               // Width scales with perspective
               const width = 2 + t * 14;
-              
+
               // Opacity increases as dashes get closer
               const opacity = 0.5 + t * 0.5;
-              
+
               if (y1 < bottomY - 30) {
                 dashes.push(
-                  <line 
+                  <line
                     key={i}
-                    x1="500" 
-                    y1={y1} 
-                    x2="500" 
+                    x1="500"
+                    y1={y1}
+                    x2="500"
                     y2={y2}
-                    stroke="#c9a227" 
+                    stroke="#c9a227"
                     strokeWidth={width}
                     strokeLinecap="round"
                     opacity={opacity}
@@ -337,15 +339,15 @@ export default function Contact() {
                 );
               }
             }
-            
+
             return dashes;
           })()}
-          
+
           {/* Soft atmospheric haze at horizon line for depth */}
           <rect x="-500" y="185" width="2000" height="35" fill={isDarkMode ? "#1a2a4a" : "#b87850"} opacity="0.25" />
-          
-          {/* Stars in the night sky - only in dark mode */}
-          {isDarkMode && (() => {
+
+          {/* Stars in the night sky - only in dark mode, client-side only */}
+          {mounted && isDarkMode && (() => {
             const stars = [];
             for (let i = 0; i < 40; i++) {
               const x = (Math.sin(i * 7.3) * 10000 % 1) * 1000;
@@ -361,8 +363,8 @@ export default function Contact() {
                   fill="#ffffff"
                   opacity={opacity}
                 >
-                  <animate 
-                    attributeName="opacity" 
+                  <animate
+                    attributeName="opacity"
                     values={`${opacity};${opacity * 0.4};${opacity}`}
                     dur={`${2 + (i % 3)}s`}
                     repeatCount="indefinite"
@@ -374,27 +376,25 @@ export default function Contact() {
             return stars;
           })()}
         </svg>
-        
+
         {/* Content overlay on the road */}
         <div className="relative z-10 min-h-[50vh] md:min-h-[70vh] flex flex-col items-center justify-center px-6 py-8 md:py-0 gap-4 md:gap-6">
           {/* Let's Connect heading */}
           <h2
-            className={`text-3xl md:text-4xl lg:text-5xl font-light text-white tracking-wide transition-all duration-700 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-            style={{ 
+            className={`text-3xl md:text-4xl lg:text-5xl font-light text-white tracking-wide transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+            style={{
               fontFamily: 'Georgia, serif',
               textShadow: '0 2px 20px rgba(0,0,0,0.6)',
             }}
           >
             Let&apos;s Connect
           </h2>
-          
+
           {/* Subtitle */}
-          <p 
-            className={`text-white/85 text-base md:text-lg font-light text-center max-w-md transition-all duration-700 delay-100 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
+          <p
+            className={`text-white/85 text-base md:text-lg font-light text-center max-w-md transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
             style={{
               textShadow: '0 1px 10px rgba(0,0,0,0.5)',
             }}
@@ -411,10 +411,9 @@ export default function Contact() {
                 target={link.name !== 'Email' ? '_blank' : undefined}
                 rel={link.name !== 'Email' ? 'noopener noreferrer' : undefined}
                 aria-label={link.name}
-                className={`group flex items-center justify-center p-2.5 sm:p-3 md:p-4 rounded-xl bg-black/25 backdrop-blur-sm border border-white/20 transition-all duration-500 hover:bg-black/35 hover:scale-105 hover:-translate-y-2 hover:shadow-xl ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}
-                style={{ 
+                className={`group flex items-center justify-center p-2.5 sm:p-3 md:p-4 rounded-xl bg-black/25 backdrop-blur-sm border border-white/20 transition-all duration-500 hover:bg-black/35 hover:scale-105 hover:-translate-y-2 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                  }`}
+                style={{
                   transitionDelay: isVisible ? `${200 + index * 150}ms` : '0ms'
                 }}
               >
